@@ -1,20 +1,32 @@
 package br.com.fintech;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class App {
     public static void main(String[] args) {
-        Cliente ana1 = new Cliente("Ana Souza", "12345678901");
-        Cliente ana2 = new Cliente("Ana Souza", "12345678901");
+        Banco banco = new Banco("FinBank");
+        ContaCorrente ana = new ContaCorrente("001", "Ana Souza", 500);
+        ContaPoupanca bruno = new ContaPoupanca("002", "Bruno Lima", 0.005);
+        ContaCorrente carla = new ContaCorrente("003", "Carla Dias", 1000);
+        banco.abrir(ana);
+        banco.abrir(bruno);
+        banco.abrir(carla);
 
-        System.out.println("ana1 == ana2 ? " + (ana1 == ana2));          // mesma referência?
-        System.out.println("ana1.equals(ana2) ? " + ana1.equals(ana2));  // mesmo conteúdo?
+        ana.depositar(1500);
+        bruno.depositar(5000);
+        carla.depositar(800);
+        ana.sacar(1800);
+        banco.fecharMes();
+        bruno.renderJuros();
 
-        Set<Cliente> clientes = new HashSet<>();
-        clientes.add(ana1);
-        clientes.add(ana2);
-        System.out.println("Clientes cadastrados: " + clientes.size());
-        System.out.println(ana1);
+        System.out.println("== Ranking por saldo ==");
+        banco.ranking().forEach(System.out::println);
+        System.out.printf("Patrimônio total: R$ %.2f%n", banco.patrimonioTotal());
+        System.out.println("Saldo acima de R$ 1.000: " + banco.titularesComSaldoAcimaDe(1000));
+
+        System.out.println("== Extrato da conta 001 ==");
+        banco.buscar("001").ifPresent(conta ->
+                conta.getExtrato().forEach(t -> System.out.println("  " + t)));
+
+        String titular = banco.buscar("999").map(Conta::getTitular).orElse("conta não encontrada");
+        System.out.println("Conta 999: " + titular);
     }
 }
