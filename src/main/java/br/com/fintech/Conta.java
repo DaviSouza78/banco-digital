@@ -22,6 +22,9 @@ public abstract class Conta {
 
     public void depositar(double valor) {
         validarValor(valor);
+        if (!(saldo + valor <= Double.MAX_VALUE)) {
+            throw new IllegalArgumentException("Crédito excede o saldo máximo");
+        }
         saldo += valor;
         registrar(TipoTransacao.DEPOSITO, valor);
     }
@@ -49,6 +52,9 @@ public abstract class Conta {
     }
 
     protected void creditarRendimento(double valor) {
+        if (!(saldo + valor <= Double.MAX_VALUE)) {
+            throw new IllegalArgumentException("Crédito excede o saldo máximo");
+        }
         saldo += valor;
         registrar(TipoTransacao.RENDIMENTO, valor);
     }
@@ -59,8 +65,8 @@ public abstract class Conta {
     protected abstract double calcularTarifaMensal();
 
     private void validarValor(double valor) {
-        if (valor <= 0) {
-            throw new IllegalArgumentException("O valor deve ser positivo: " + valor);
+        if (!(valor > 0 && valor <= Double.MAX_VALUE)) {
+            throw new IllegalArgumentException("O valor deve ser positivo e finito: " + valor);
         }
     }
 
