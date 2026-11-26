@@ -54,4 +54,24 @@ class TransferenciaServiceTest {
         assertEquals(1000.0, origem.getSaldo(), 0.001);
         assertEquals(0.0, destino.getSaldo(), 0.001);
     }
+
+    @Test
+    void valorInvalidoNaoAlteraContasNemExtratos() {
+        TransferenciaService servico = new TransferenciaService(repositorio, valor -> 2.50);
+        assertThrows(IllegalArgumentException.class, () -> servico.transferir("001", "002", -1));
+        assertThrows(IllegalArgumentException.class, () -> servico.transferir("001", "002", 0));
+        assertThrows(IllegalArgumentException.class, () -> servico.transferir("001", "002", Double.NaN));
+        assertEquals(1000.0, origem.getSaldo(), 0.001);
+        assertEquals(0.0, destino.getSaldo(), 0.001);
+        assertEquals(1, origem.getExtrato().size());
+        assertEquals(0, destino.getExtrato().size());
+    }
+
+    @Test
+    void tarifaInvalidaNaoAlteraContas() {
+        TransferenciaService servico = new TransferenciaService(repositorio, valor -> -1);
+        assertThrows(IllegalArgumentException.class, () -> servico.transferir("001", "002", 100));
+        assertEquals(1000.0, origem.getSaldo(), 0.001);
+        assertEquals(0.0, destino.getSaldo(), 0.001);
+    }
 }

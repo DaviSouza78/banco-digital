@@ -15,12 +15,21 @@ public class TransferenciaService {
     }
 
     public void transferir(String origem, String destino, double valor) {
+        if (!(valor > 0 && valor <= Double.MAX_VALUE)) {
+            throw new IllegalArgumentException("O valor deve ser positivo e finito: " + valor);
+        }
         if (origem.equals(destino)) {
             throw new IllegalArgumentException("Origem e destino devem ser diferentes");
         }
         Conta de = buscar(origem);
         Conta para = buscar(destino);
         double tarifa = politica.calcular(valor);
+        if (!(tarifa >= 0 && valor + tarifa <= Double.MAX_VALUE)) {
+            throw new IllegalArgumentException("Tarifa inválida: " + tarifa);
+        }
+        if (!(para.getSaldo() + valor <= Double.MAX_VALUE)) {
+            throw new IllegalArgumentException("Crédito excede o saldo máximo");
+        }
         de.sacar(valor + tarifa);
         para.depositar(valor);
     }
