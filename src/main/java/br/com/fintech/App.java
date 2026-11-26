@@ -2,24 +2,17 @@ package br.com.fintech;
 
 public class App {
     public static void main(String[] args) {
-        Conta contaDaAna = new Conta();      // new cria um OBJETO no heap
-        contaDaAna.numero = "001";
-        contaDaAna.titular = "Ana Souza";
+        Conta contaDaAna = new Conta("001", "Ana Souza");
         contaDaAna.depositar(1000);
+        contaDaAna.sacar(100);
+        System.out.println(contaDaAna);
 
-        Conta contaDoBruno = new Conta();    // outro objeto, outro estado
-        contaDoBruno.numero = "002";
-        contaDoBruno.titular = "Bruno Lima";
+        Conta contaDoBruno = new Conta("002", "Bruno Lima");
         contaDoBruno.depositar(250);
+        System.out.println(contaDoBruno);
 
-        Conta outraReferencia = contaDaAna;  // NÃO cria objeto: aponta para o mesmo
-        outraReferencia.sacar(100);
-
-        contaDaAna.exibir();
-        contaDoBruno.exibir();
-
-        // Nada impede isto... e é esse o problema que a próxima etapa resolve:
-        contaDoBruno.saldo = -1_000_000;
-        contaDoBruno.exibir();
+        System.out.println("Tentando sacar R$ 5.000 da conta do Bruno...");
+        contaDoBruno.sacar(5000);
+        System.out.println("Esta linha nunca será impressa.");
     }
 }
