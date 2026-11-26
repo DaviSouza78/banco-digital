@@ -1,17 +1,20 @@
 package br.com.fintech;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class App {
     public static void main(String[] args) {
-        ContaCorrente corrente = new ContaCorrente("001", "Ana Souza", 500);
-        corrente.depositar(2000);
-        SeguroDeVida seguro = new SeguroDeVida("Ana Souza", 1200);
+        Cliente ana1 = new Cliente("Ana Souza", "12345678901");
+        Cliente ana2 = new Cliente("Ana Souza", "12345678901");
 
-        CalculadoraDeImpostos calculadora = new CalculadoraDeImpostos();
-        calculadora.registrar(corrente);     // é uma Conta E é Tributavel
-        calculadora.registrar(seguro);       // não é Conta, mas é Tributavel
+        System.out.println("ana1 == ana2 ? " + (ana1 == ana2));          // mesma referência?
+        System.out.println("ana1.equals(ana2) ? " + ana1.equals(ana2));  // mesmo conteúdo?
 
-        System.out.println(corrente.resumoImposto());
-        System.out.println(seguro.resumoImposto());
-        System.out.printf("Total de impostos: R$ %.2f%n", calculadora.total());
+        Set<Cliente> clientes = new HashSet<>();
+        clientes.add(ana1);
+        clientes.add(ana2);
+        System.out.println("Clientes cadastrados: " + clientes.size());
+        System.out.println(ana1);
     }
 }
