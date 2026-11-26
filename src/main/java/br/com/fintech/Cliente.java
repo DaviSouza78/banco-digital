@@ -1,39 +1,12 @@
 package br.com.fintech;
 
-import java.util.Objects;
+// Um record gera sozinho: construtor, campos private final, nome(), cpf(),
+// equals, hashCode e toString. Ideal para dados imutáveis (value objects / DTOs).
+public record Cliente(String nome, String cpf) {
 
-public class Cliente {
-
-    private final String nome;
-    private final String cpf;
-
-    public Cliente(String nome, String cpf) {
-        this.nome = nome;
-        this.cpf = cpf;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;                        // mesmo objeto
-        if (!(o instanceof Cliente outro)) return false;   // tipo diferente (ou null)
-        return cpf.equals(outro.cpf);                      // mesma identidade de negócio
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cpf);          // TEM que usar os mesmos campos do equals
-    }
-
-    @Override
-    public String toString() {
-        return "Cliente{nome='" + nome + "', cpf='" + cpf + "'}";
+    public Cliente {                          // construtor compacto: validação
+        if (cpf == null || !cpf.matches("\\d{11}")) {
+            throw new IllegalArgumentException("CPF deve ter 11 dígitos: " + cpf);
+        }
     }
 }
