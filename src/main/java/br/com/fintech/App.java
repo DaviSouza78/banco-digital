@@ -2,25 +2,17 @@ package br.com.fintech;
 
 public class App {
     public static void main(String[] args) {
-        Conta conta = new Conta("002", "Bruno Lima");
-        conta.depositar(250);
+        ContaCorrente corrente = new ContaCorrente("001", "Ana Souza", 500);
+        corrente.depositar(1000);
+        corrente.sacar(1300);                // usa o limite do cheque especial
+        System.out.println(corrente);
 
-        try {
-            System.out.println("Tentando sacar R$ 5.000...");
-            conta.sacar(5000);
-            System.out.println("Saque realizado!");          // não executa
-        } catch (SaldoInsuficienteException e) {
-            System.out.println("Operação recusada: " + e.getMessage());
-        } finally {
-            System.out.println("Saldo após a tentativa: R$ " + conta.getSaldo());
-        }
+        ContaPoupanca poupanca = new ContaPoupanca("002", "Bruno Lima", 0.005);
+        poupanca.depositar(2000);
+        poupanca.renderJuros();
+        System.out.println(poupanca);
 
-        try {
-            conta.depositar(-10);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Depósito inválido: " + e.getMessage());
-        }
-
-        System.out.println("O programa continua normalmente.");
+        corrente.aplicarTarifaMensal();
+        System.out.println("Depois da tarifa: " + corrente);
     }
 }
